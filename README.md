@@ -50,6 +50,7 @@ __Nat__
 curl google.com
 ```
 nous renvoie une réponse __HTTP 301__
+
 Le code 301 permet une redirection permanente vers une nouvelle page. 
 
 __Net1 et net2__
@@ -106,6 +107,7 @@ ip route show
 10.0.2.2 dev enp0s3 lladdr 52:54:00:12:35:02 STALE
 ```
 Delay : Expirée
+
 Stale : Arrive bientôt à expiration 
 ```bash
 # Je vide la table ARP : ip neigh flush all*[root@client1 network-scripts]# ip neigh show
@@ -118,6 +120,7 @@ Stale : Arrive bientôt à expiration
 10.1.2.1 dev enp0s9 lladdr 0a:00:27:00:00:4b REACHABLE
 ```
 l'adresse 10.1.2.1 ping récément apparait dans la table ARP avec : _REACHABLE_
+
 Elle a été joignable récemment.
 
 ### Capture Réseau
@@ -136,4 +139,3 @@ PS C:\Users\benoi> scp centos@10.1.1.2:/home/centos/ping.pcap .\Downloads\
 
 ### 1. Mise en place
 
-Markdown 3527 bytes 534 words 135 lines Ln 8, Col 43 HTML 2764 characters 493 words 90 paragraphs
