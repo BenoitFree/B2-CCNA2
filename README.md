@@ -8,6 +8,7 @@ Il y a 256 adresses disponibles dans un /24
 
 ### combien y a-t-il d'adresses disponibles dans un  `/30`  ? Son utilité ?
 • Il y a 2 adresses disponibles dans un /30
+
 • On sait qu'il n-y à que 2 machines, donc c'est plus sécurisé.
 
 ### Route statique
