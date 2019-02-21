@@ -1,3 +1,4 @@
+
 Welcome file
 Welcome file
 # b2-net-tp1	
@@ -7,9 +8,9 @@ Welcome file
 Il y a 256 adresses disponibles dans un /24
 
 ### combien y a-t-il d'adresses disponibles dans un  `/30`  ? Son utilité ?
-• Il y a 2 adresses disponibles dans un /30
+Il y a 2 adresses disponibles dans un /30
 
-• On sait qu'il n-y à que 2 machines, donc c'est plus sécurisé.
+On sait qu'il n-y à que 2 machines, donc c'est plus sécurisé.
 
 ### Route statique
 ```bash
@@ -26,7 +27,7 @@ _BOOTPROTO=static_
 Idem pour la enp0s9
 
 ### Connexion SSH
-• Je me connecte en ssh (Powershell) : 
+Je me connecte en ssh (Powershell) : 
 ```
 ssh centos@10.1.1.2
 ```
@@ -38,7 +39,7 @@ echo 'client1.tp1.b2' | sudo tee /etc/hostname
 ```
 -> Changement réussi
 
-### Changement Hosts
+#### Changement Hosts
 ```bash
 10.1.1.1 client1 client1.tp1.b2
 10.1.2.1 client1 client1.tp1.b1
@@ -139,5 +140,35 @@ PS C:\Users\benoi> scp centos@10.1.1.2:/home/centos/ping.pcap .\Downloads\
 ```
 ## II. Communication simple entre deux machines
 
-### 1. Mise en place
+### UDP
 
+```bash
+[centos@client1 ~]$ sudo firewall-cmd --add-port=8888/udp --permanent
+[centos@client1 ~]$ sudo firewall-cmd --reload
+[centos@client1 ~]$ nc -u -l 8888
+
+[centos@client2 ~]$ nc -u 10.1.1.2 8888
+
+Je peux ensuite communiquer entre les 2 VM
+```
+
+```
+[centos@client1 ~]$ ss -unp
+Recv-Q Send-Q                    Local Address:Port                                   Peer Address:Port
+0      0                              10.1.1.2:8888                                       10.1.1.3:59629               users:(("nc",pid=4456,fd=4))
+----
+[centos@client1 ~]$ sudo tcpdump -i enp0s8 -w nc-udp.pcap
+Je récupère la capture pour l'analyser avec Wireshark
+PS C:\Users\benoi> scp centos@10.1.1.2:/home/centos/nc-udp.pcap .\Downloads\
+> 100% 1327   265.5KB/s
+
+
+```
+
+### TCP
+
+```
+[centos@client1 ~]$ nc -l 8888
+[centos@client2 ~]$ nc 10.1.1.2 8888
+
+```
