@@ -28,7 +28,7 @@ Idem pour la enp0s9
 ### Connexion SSH
 • Je me connecte en ssh (Powershell) : 
 ```
-centos@10.1.1.2
+ssh centos@10.1.1.2
 ```
 -> Connexion réussi
 
@@ -98,6 +98,8 @@ Statistiques Ping pour 10.1.2.0:
 systemctl restart network
 ip route show
 10.1.2.0/30 dev enp0s9 proto kernel scope link src 10.1.2.2 metric 102
+ou alors : 
+sudo ip route add 10.1.2.0/30 via 10.1.2.2 dev enp0s9
 ```
 
 ### Table ARP
