@@ -1,4 +1,6 @@
-------
+
+
+[TOC]
 
 # I. Mise en place du lab
 
