@@ -37,7 +37,7 @@ De la manière que le router2 ne pas ping client1, puique la route retour n'exis
 
 ![Capture 1](https://github.com/BenoitYnov/Tp-ccna2/blob/master/img/tp2-1.PNG?raw=true)
 
-![Capture 2](C:\Users\benoi\AppData\Roaming\Typora\typora-user-images\1551706312205.png)
+![Capture 2](https://github.com/BenoitYnov/Tp-ccna2/blob/master/img/tp2-2.PNG?raw=true)
 
 
 
@@ -110,4 +110,58 @@ curl: (6) Could not resolve host: google.com; Erreur inconnue
 
 
 ### 2. DHCP server
+
+```
+1. sudo yum install -y dhcp
+2. sudo systemctl start dhcpd
+3. Modification du dhcpd.conf
+```
+
+```
+[root@client2 network-scripts]# cat ifcfg-enp0s8
+TYPE=Ethernet
+BOOTPROTO=dhcp
+NAME=enp0s8
+DEVICE=enp0s8
+ONBOOT=yes
+ZONE=public
+
+> dhclient
+```
+
+
+
+### 3. NTP server
+
+```
+[centos@router1 ~]$ sudo systemctl restart chronyd
+```
+
+```
+chronyc> sources
+210 Number of sources = 4
+MS Name/IP address         Stratum Poll Reach LastRx Last sample
+===============================================================================
+^* mica.ad-notam.net             2   6    17    57  +2617us[ +703us] +/-   47ms
+^+ herbrand.noumicek.cz          2   6    17    57   +194us[-1720us] +/-   49ms
+^+ web01.webhd.nl                3   6    17    57  -2820us[-4734us] +/-   77ms
+^+ ntp2.omdc.pl                  2   6    17    57   +108us[-1806us] +/-   78ms
+```
+
+```
+chronyc> tracking
+Reference ID    : 25BB682C (herbrand.noumicek.cz)
+Stratum         : 3
+Ref time (UTC)  : Mon Mar 04 15:39:23 2019
+System time     : 0.000314301 seconds slow of NTP time
+Last offset     : -0.001164005 seconds
+RMS offset      : 0.001164005 seconds
+Frequency       : 6.969 ppm fast
+Residual freq   : -13.407 ppm
+Skew            : 0.750 ppm
+Root delay      : 0.044139553 seconds
+Root dispersion : 0.027277250 seconds
+Update interval : 63.9 seconds
+Leap status     : Normal
+```
 
