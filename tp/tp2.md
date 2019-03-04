@@ -148,7 +148,7 @@ server 2.centos.pool.ntp.org iburst
 server 3.centos.pool.ntp.org iburst
 ```
 
-> Ajout du port UDP 123
+> Ajout du port/udp 123
 
 ```
 [centos@router1 ~]$ sudo firewall-cmd --add-port=123/udp --permanent
@@ -189,4 +189,17 @@ On remarque qu'il y à **1 heure** de moins.
 
 
 ### 4. Web server
+
+> Ajout de la carte NAT sur server1 pour avoir une connexion à internet
+>
+> Installation de nginx  + ouverture du port/tcp 80
+
+```
+[centos@server1 ~]$ sudo firewall-cmd --add-port=80/tcp --permanent
+success
+```
+
+> Vérification
+
+![server](https://github.com/BenoitYnov/Tp-ccna2/blob/master/img/server.PNG?raw=true)
 
