@@ -39,3 +39,75 @@ De la manière que le router2 ne pas ping client1, puique la route retour n'exis
 
 ![Capture 2](C:\Users\benoi\AppData\Roaming\Typora\typora-user-images\1551706312205.png)
 
+
+
+# II. NAT et services d'infra
+
+### 1. Mise en place du NAT
+
+> Après avoir curl vers google.com je modifie les fichiers de config de router1.
+
+```
+[root@router1 network-scripts]# cat ifcfg-enp0s3 | grep "public"
+ZONE=public
+
+[root@router1 network-scripts]# cat ifcfg-enp0s8 | grep "public"
+ZONE=public
+
+[root@router1 network-scripts]# cat ifcfg-enp0s9 | grep "internal"
+ZONE=internal
+```
+
+> Activation de NAT dans la zone public
+
+```
+[centos@router1 ~]$ sudo firewall-cmd --add-masquerade --zone=public --permanent
+[sudo] Mot de passe de centos : 
+success
+[centos@router1 ~]$ sudo firewall-cmd --reload
+success
+```
+
+> Sur router2, j'ajoute une route vers router1 puis je test l'accès à internet
+
+```
+[centos@router2 network-scripts]$ cat route-enp0s9
+default via 10.2.12.2 dev enp0s9
+10.2.1.0/24 via 10.2.12.2 dev enp0s9
+
+[centos@router2 network-scripts]$ curl google.com
+<HTML><HEAD><meta http-equiv="content-type" content="text/html;charset=utf-8">
+<TITLE>301 Moved</TITLE></HEAD><BODY>
+<H1>301 Moved</H1>
+The document has moved
+<A HREF="http://www.google.com/">here</A>.
+</BODY></HTML>
+```
+
+> Idem pour client1
+
+```
+[root@client1 network-scripts]# cat route-enp0s8
+default via 10.2.1.254 dev enp0s8
+10.2.2.0/24 via 10.2.1.254 dev enp0s8
+
+[root@client1 network-scripts]# curl google.com
+<HTML><HEAD><meta http-equiv="content-type" content="text/html;charset=utf-8">
+<TITLE>301 Moved</TITLE></HEAD><BODY>
+<H1>301 Moved</H1>
+The document has moved
+<A HREF="http://www.google.com/">here</A>.
+</BODY></HTML>
+```
+
+> Je vérifie que server1 n'ait pas accès à internet
+
+```
+[centos@server1 ~]$ curl google.com
+curl: (6) Could not resolve host: google.com; Erreur inconnue
+```
+
+
+
+### 2. DHCP server
+
