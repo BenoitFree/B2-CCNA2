@@ -137,31 +137,56 @@ ZONE=public
 [centos@router1 ~]$ sudo systemctl restart chronyd
 ```
 
+> Modification du fichier de config chrony
+
 ```
+[centos@router2 network-scripts]$ cat /etc/chrony.conf | grep "server"
+# Use public servers from the pool.ntp.org project.
+server 0.centos.pool.ntp.org iburst
+server 1.centos.pool.ntp.org iburst
+server 2.centos.pool.ntp.org iburst
+server 3.centos.pool.ntp.org iburst
+```
+
+> Ajout du port UDP 123
+
+```
+[centos@router1 ~]$ sudo firewall-cmd --add-port=123/udp --permanent
+success	
+```
+
+> Vérification de l'état de la synchronisation NTP
+
+```
+[centos@router1 ~]$ sudo systemctl start chronyd
 chronyc> sources
 210 Number of sources = 4
 MS Name/IP address         Stratum Poll Reach LastRx Last sample
 ===============================================================================
-^* mica.ad-notam.net             2   6    17    57  +2617us[ +703us] +/-   47ms
-^+ herbrand.noumicek.cz          2   6    17    57   +194us[-1720us] +/-   49ms
-^+ web01.webhd.nl                3   6    17    57  -2820us[-4734us] +/-   77ms
-^+ ntp2.omdc.pl                  2   6    17    57   +108us[-1806us] +/-   78ms
-```
+^- powered.by.root24.eu          2   8   373   100  +4628us[+4500us] +/-   61ms
+^- web01.webhd.nl                3   9   377   816  +6843us[+6547us] +/-   79ms
+^* regar42.fr                    3   9   377    38   -314us[ -445us] +/- 9837us
+^- clients14.arcanite.ch         2   9   377   334  +7209us[+7097us] +/-   65ms
 
-```
 chronyc> tracking
-Reference ID    : 25BB682C (herbrand.noumicek.cz)
-Stratum         : 3
-Ref time (UTC)  : Mon Mar 04 15:39:23 2019
-System time     : 0.000314301 seconds slow of NTP time
-Last offset     : -0.001164005 seconds
-RMS offset      : 0.001164005 seconds
-Frequency       : 6.969 ppm fast
-Residual freq   : -13.407 ppm
-Skew            : 0.750 ppm
-Root delay      : 0.044139553 seconds
-Root dispersion : 0.027277250 seconds
-Update interval : 63.9 seconds
+Reference ID    : 3ED2F492 (regar42.fr)
+Stratum         : 4
+Ref time (UTC)  : Mon Mar 04 15:55:12 2019
+System time     : 422.776092529 seconds slow of NTP time
+Last offset     : -0.000131207 seconds
+RMS offset      : 53.378540039 seconds
+Frequency       : 6.897 ppm fast
+Residual freq   : -0.012 ppm
+Skew            : 0.332 ppm
+Root delay      : 0.019673342 seconds
+Root dispersion : 0.000057056 seconds
+Update interval : 475.6 seconds
 Leap status     : Normal
 ```
+
+On remarque qu'il y à **1 heure** de moins.
+
+
+
+### 4. Web server
 
