@@ -35,6 +35,7 @@ De la manière que le router2 ne pas ping client1, puique la route retour n'exis
 
 ### 3. Visualisation du routage avec Wireshark
 
+![Capture 1](https://github.com/BenoitYnov/Tp-ccna2/blob/master/img/tp2-1.PNG?raw=true)
 
+![Capture 2](C:\Users\benoi\AppData\Roaming\Typora\typora-user-images\1551706312205.png)
 
-###   
