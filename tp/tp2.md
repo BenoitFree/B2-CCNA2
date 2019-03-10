@@ -1,7 +1,3 @@
-
-
-[TOC]
-
 # I. Mise en place du lab
 
 ### 1. Création des VMs et adressage IP
