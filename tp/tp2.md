@@ -41,11 +41,15 @@ De la manière que le router2 ne pas ping client1, puique la route retour n'exis
 
 ![Capture 2](https://github.com/BenoitYnov/Tp-ccna2/blob/master/img/tp2-2.PNG?raw=true)
 
+**Expliquer la différence**
 
+ La différence se trouve au niveau de l'adresse MAC où elle est différente.
 
 # II. NAT et services d'infra
 
 ### 1. Mise en place du NAT
+
+**/ ! \ Cette partie a été modifiée à la fin du TP** 
 
 > Après avoir curl vers google.com je modifie les fichiers de config de router1.
 
@@ -204,4 +208,30 @@ success
 > Vérification
 
 ![server](https://github.com/BenoitYnov/Tp-ccna2/blob/master/img/server.PNG?raw=true)
+
+
+
+**FIX : Mise à jour des zones dans router1 et router2**
+
+> On peut désormais curl vers 10.2.2.10
+
+```html
+[centos@dhcp-server ~]$ curl 10.2.2.10
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
+    <head>
+        <title>Test Page for the Nginx HTTP Server on Fedora</title>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    </head>
+
+    <body>
+        <h1>Welcome to <strong>nginx</strong> on Fedora!</h1>
+
+        <div class="content">
+                <p> Coucou, modification du .html </p>
+        </div>
+    </body>
+</html>
+```
 
