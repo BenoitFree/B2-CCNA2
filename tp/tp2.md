@@ -28,7 +28,9 @@ c64 bytes from 10.2.2.10: icmp_seq=5 ttl=62 time=1.89 ms
 rtt min/avg/max/mdev = 1.048/1.434/1.906/0.353 ms
 ```
 
-**Expliquer pourquoi depuis router1 on n'arrive pas à ping server1 Server1 ne connait pas l'adresse de réseau de router 1 donc il ne pas communiqué avec ce dernier.**
+**Expliquer pourquoi depuis router1 on n'arrive pas à ping server1**
+
+Server1 ne connait pas l'adresse de réseau de router 1 donc il ne pas communiqué avec ce dernier.
 De la manière que le router2 ne pas ping client1, puique la route retour n'existe pas.
 
 ### 3. Visualisation du routage avec Wireshark
