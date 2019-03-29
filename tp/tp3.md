@@ -140,3 +140,97 @@ PING 10.2.1.11 (10.2.2.11) 56(84) bytes of data.
 # III. Mise en place d'OSPF
 
 ### 1. Mise en place du lab
+
+> Configuration des routeurs
+
+```bash
+R1#show ip int br
+Interface                  IP-Address      OK? Method Status                Protocol
+FastEthernet0/0            10.3.100.1      YES manual up                    up
+FastEthernet1/0            10.3.102.254    YES manual up                    up
+FastEthernet2/0            10.3.100.22     YES manual up                    up
+```
+
+```bash
+R2#sh ip int br
+Interface                  IP-Address      OK? Method Status                Protocol
+FastEthernet0/0            10.3.100.2      YES manual up                    up
+FastEthernet1/0            10.3.100.5      YES manual up                    up
+
+```
+
+```bash
+R3#sh ip int br
+Interface                  IP-Address      OK? Method Status                Protocol
+FastEthernet0/0            10.3.100.6      YES manual up                    up
+FastEthernet1/0            10.3.100.9      YES manual up                    up
+```
+
+```bash
+R4#sh ip int br
+Interface                  IP-Address      OK? Method Status                Protocol
+FastEthernet0/0            10.3.100.13     YES manual up                    up
+FastEthernet1/0            10.3.100.10     YES manual up                    up
+FastEthernet2/0            10.3.101.254    YES manual up                    up
+
+```
+
+```bash
+R5#sh ip int br
+Interface                  IP-Address      OK? Method Status                Protocol
+FastEthernet0/0            10.3.100.17     YES manual up                    up
+FastEthernet1/0            10.3.100.14     YES manual up                    up
+
+```
+
+```bash
+R6#sh ip int br
+Interface                  IP-Address      OK? Method Status                Protocol
+FastEthernet0/0            10.3.100.21     YES manual up                    up
+FastEthernet1/0            10.3.100.18     YES manual up                    up
+
+```
+
+> Chaque routeur peut ping son voisin, exemple avec R2
+
+```bash
+R2#ping 10.3.100.2
+
+Type escape sequence to abort.
+Sending 5, 100-byte ICMP Echos to 10.3.100.2, timeout is 2 seconds:
+!!!!!
+Success rate is 100 percent (5/5), round-trip min/avg/max = 1/2/4 ms
+R2#ping 10.3.100.5
+
+Type escape sequence to abort.
+Sending 5, 100-byte ICMP Echos to 10.3.100.5, timeout is 2 seconds:
+!!!!!
+Success rate is 100 percent (5/5), round-trip min/avg/max = 1/3/4 ms
+
+```
+
+### 2. Configuration de OSPF
+
+> Exemple : Configuration OSPF de router 2 
+
+```bash
+R2(config)#router ospf 1
+R2(config-router)#router
+R2(config-router)#router-id 2.2.2.2
+R2(config-router)#network 10.3.100.2 0.0.0.3 area 0
+
+R2(config-router)#network 10.3.100.5 0.0.0.3 area 0
+```
+
+> ... Il faut le faire pour chaque router
+
+```bash
+R4(config)#router ospf 1
+R4(config-router)#router-id 4.4.4.4
+R4(config-router)#network 10.3.101.254 0.0.0.255 area 1
+
+R4(config-router)#network 10.3.100.10 0.0.0.3 area 0
+
+R4(config-router)#network 10.3.100.13 0.0.0.3 area 0
+```
+
