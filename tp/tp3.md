@@ -240,7 +240,7 @@ R4(config-router)#network 10.3.100.13 0.0.0.3 area 0
 
 **Topologie** 
 
-![](C:\Users\benoi\OneDrive\Documents\b2-net-tp1\img\topo.png)
+![](https://raw.githubusercontent.com/BenoitYnov/B2-CCNA2/master/img/topo.png)
 
 |      Hosts       | 10.3.100.0/30 | 10.3.100.4/30 | 10.3.101.0/24 | 10.3.102.0/24 |
 | :--------------: | :-----------: | :-----------: | :-----------: | :-----------: |
