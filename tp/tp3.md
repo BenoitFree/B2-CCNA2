@@ -242,12 +242,37 @@ R4(config-router)#network 10.3.100.13 0.0.0.3 area 0
 
 ![](https://raw.githubusercontent.com/BenoitYnov/B2-CCNA2/master/img/topo.png)
 
-|      Hosts       | 10.3.100.0/30 | 10.3.100.4/30 | 10.3.101.0/24 | 10.3.102.0/24 |
-| :--------------: | :-----------: | :-----------: | :-----------: | :-----------: |
-| client1.lab4.tp3 |       x       |       x       |  10.3.101.11  |       x       |
-| client2.lab4.tp3 |       x       |       x       |  10.3.101.12  |       x       |
-| server1.lab4.tp3 |       x       |       x       |       x       |  10.3.102.10  |
-| server2.lab4.tp3 |       x       |       x       |       x       |  10.3.102.11  |
-| router1.lab4.tp3 |  10.3.100.1   |  10.3.100.5   |       x       |       x       |
-| router2.lab4.tp3 |  10.3.100.2   |  10.3.100.6   |       x       |       x       |
+|      Hosts       | 10.3.100.0/30 | 10.3.100.4/30 | 10.3.101.0/24  | 10.3.102.0/24  |
+| :--------------: | :-----------: | :-----------: | :------------: | :------------: |
+| client1.lab4.tp3 |       x       |       x       | 10.3.101.11/24 |       x        |
+| client2.lab4.tp3 |       x       |       x       | 10.3.101.12/24 |       x        |
+| server1.lab4.tp3 |       x       |       x       |       x        | 10.3.102.10/24 |
+| server2.lab4.tp3 |       x       |       x       |       x        | 10.3.102.11/24 |
+| router1.lab4.tp3 | 10.3.100.1/30 | 10.3.100.5/30 |       x        |       x        |
+| router2.lab4.tp3 | 10.3.100.2/30 | 10.3.100.6/30 |       x        |       x        |
+
+> Configuration des hosts 
+
+> Configuration des routeurs (ici Router1 pour l'exemple)
+
+```
+R1(config)#interface fastEthernet 0/0
+R1(config-if)#ip address 10.3.100.1 255.255.255.252
+R1(config-if)#no shut
+R1(config-if)#exit
+R1(config)#exit
+
+R1(config)#interface fastEthernet 1/0
+R1(config-if)#ip address 10.3.100.5 255.255.255.252
+R1(config-if)#no shut
+R1(config-if)#exit
+R1(config)#exit
+
+R1#sh ip interface brief
+Interface                  IP-Address      OK? Method Status                Protocol
+FastEthernet0/0            10.3.100.1      YES manual up                    up
+FastEthernet1/0            10.3.100.5      YES manual up                    up
+FastEthernet2/0            unassigned      YES unset  administratively down down
+FastEthernet3/0            unassigned      YES unset  administratively down down
+```
 
