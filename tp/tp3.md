@@ -234,3 +234,20 @@ R4(config-router)#network 10.3.100.10 0.0.0.3 area 0
 R4(config-router)#network 10.3.100.13 0.0.0.3 area 0
 ```
 
+
+
+# IV. Lab Final
+
+**Topologie** 
+
+![](C:\Users\benoi\OneDrive\Documents\b2-net-tp1\img\topo.png)
+
+|      Hosts       | 10.3.100.0/30 | 10.3.100.4/30 | 10.3.101.0/24 | 10.3.102.0/24 |
+| :--------------: | :-----------: | :-----------: | :-----------: | :-----------: |
+| client1.lab4.tp3 |       x       |       x       |  10.3.101.11  |       x       |
+| client2.lab4.tp3 |       x       |       x       |  10.3.101.12  |       x       |
+| server1.lab4.tp3 |       x       |       x       |       x       |  10.3.102.10  |
+| server2.lab4.tp3 |       x       |       x       |       x       |  10.3.102.11  |
+| router1.lab4.tp3 |  10.3.100.1   |  10.3.100.5   |       x       |       x       |
+| router2.lab4.tp3 |  10.3.100.2   |  10.3.100.6   |       x       |       x       |
+
