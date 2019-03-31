@@ -1,5 +1,3 @@
-[TOC]
-
 # I. Mise en place du lab
 
 ### 1. Vérification
@@ -234,7 +232,11 @@ R4(config-router)#network 10.3.100.13 0.0.0.3 area 0
 
 # IV. Lab Final
 
-
+-   [IV. Lab Final](https://github.com/BenoitYnov/B2-CCNA2/blob/master/tp/tp3.md#ii-nat-et-services-dinfra)
+    -   [Configuration](https://github.com/BenoitYnov/B2-CCNA2/blob/master/tp/tp3.md#Configuration)
+    -   [OSPF](https://github.com/BenoitYnov/B2-CCNA2/blob/master/tp/tp3.md#OSPF)
+    -   [Switch](https://github.com/BenoitYnov/B2-CCNA2/blob/master/tp/tp3.md#Switch)
+    -   [NAT](https://github.com/BenoitYnov/B2-CCNA2/blob/master/tp/tp3.md#NAT)
 
 **Topologie**
 
