@@ -1,15 +1,13 @@
-## I. Manipulation de switches et de VLAN
+[TOC]
 
-### 1. Mise en place du lab
+# I. Mise en place du lab
 
-####  Vérification
+### 1. Vérification
 
 - [x] [Nom de domaines](https://github.com/It4lik/B2-Reseau-2018/blob/master/cours/procedures.md#changer-son-nom-de-domaine) sur toutes les machines
 - [x] Toutes les machines doivent pouvoir se `ping`
 
-
-
-##  2. Configuration des VLANs
+### 2. Configuration des VLANs
 
 ```bash
 SW1#show vlan brief
@@ -48,9 +46,7 @@ PING 10.1.1.3 (10.1.1.3) 56(84) bytes of data.
 3 packets transmitted, 3 received, 0% packet loss, time 2092ms
 ```
 
-
-
-## II. Manipulation simple de routeurs
+# II. Manipulation simple de routeurs
 
 ### 1. Mise en place du lab
 
@@ -238,7 +234,9 @@ R4(config-router)#network 10.3.100.13 0.0.0.3 area 0
 
 # IV. Lab Final
 
-**Topologie** 
+
+
+**Topologie**
 
 ![](https://raw.githubusercontent.com/BenoitYnov/B2-CCNA2/master/img/topo.png)
 
@@ -251,11 +249,37 @@ R4(config-router)#network 10.3.100.13 0.0.0.3 area 0
 | router1.lab4.tp3 | 10.3.100.1/30 | 10.3.100.5/30 |       x        |       x        |
 | router2.lab4.tp3 | 10.3.100.2/30 | 10.3.100.6/30 |       x        |       x        |
 
-> Configuration des hosts 
+### Configuration
 
-> Configuration des routeurs (ici Router1 pour l'exemple)
+#### Configuration des hosts 
+
+> Hostname
 
 ```
+[centos@localhost ~]$ sudo echo 'client1.lab4.tp3' | sudo tee /etc/hostname
+[centos@localhost ~]$ sudo echo 'client2.lab4.tp3' | sudo tee /etc/hostname
+[centos@localhost ~]$ sudo echo 'server1.lab4.tp3' | sudo tee /etc/hostname
+[centos@localhost ~]$ sudo echo 'server2.lab4.tp3' | sudo tee /etc/hostname
+```
+
+> IP statique : (exemple avec le client2)
+
+```
+[centos@client1 ~]$ cat /etc/sysconfig/network-scripts/ifcfg-enp0s3
+TYPE=Ethernet
+BOOTPROTO=static
+NAME=enp0s3
+DEVICE=enp0s3
+ONBOOT=yes
+IPADDR=10.3.101.11
+NETMASK=255.255.255.0
+```
+
+#### Configuration des routeurs
+
+> • Configuration des routeurs (ici Router1 pour l'exemple)
+
+```bash
 R1(config)#interface fastEthernet 0/0
 R1(config-if)#ip address 10.3.100.1 255.255.255.252
 R1(config-if)#no shut
@@ -268,6 +292,12 @@ R1(config-if)#no shut
 R1(config-if)#exit
 R1(config)#exit
 
+interface fastEthernet 1/0
+ip address 10.3.100.5 255.255.255.252
+no shut
+exit
+exit
+
 R1#sh ip interface brief
 Interface                  IP-Address      OK? Method Status                Protocol
 FastEthernet0/0            10.3.100.1      YES manual up                    up
@@ -276,3 +306,176 @@ FastEthernet2/0            unassigned      YES unset  administratively down down
 FastEthernet3/0            unassigned      YES unset  administratively down down
 ```
 
+On ping pour vérifier 
+
+```bash
+R1#ping 10.3.100.5
+
+Type escape sequence to abort.
+Sending 5, 100-byte ICMP Echos to 10.3.100.5, timeout is 2 seconds:
+!!!!!
+Success rate is 100 percent (5/5), round-trip min/avg/max = 1/3/4 ms
+```
+
+```bash
+R2#ping 10.3.100.1
+
+Type escape sequence to abort.
+Sending 5, 100-byte ICMP Echos to 10.3.100.1, timeout is 2 seconds:
+!!!!!
+Success rate is 100 percent (5/5), round-trip min/avg/max = 1/2/4 ms
+```
+
+### OSPF
+
+> • Configuration OSPF (exemple avec Router 1)
+
+```bash
+R1(config)#router ospf 1
+R1(config-router)#router-id 1.1.1.1 
+R1(config-router)#network 10.3.100.0 0.0.0.3 area 0
+R1(config-router)#exit
+R1(config)#exit
+```
+
+ Sur router2 : 
+
+```bash
+R2(config-router)# router-id 2.2.2.2
+R2(config-router)#network 10.3.100.0 0.0.0.3 area 0
+```
+
+### Switch
+
+> • Configuration des Switch 
+
+```
+SW1(config)#vlan 10
+SW1(config-vlan)#name client-network
+SW1(config-vlan)#exit
+SW1(config)#interface Ethernet 0/1
+SW1(config-if)#switchport mode access
+SW1(config-if)#switchport access vlan 10
+SW1(config-if)#exit
+```
+
+Mais aussi : 
+
+```
+SW1(config)#interface Ethernet 0/2
+```
+
+Idem pour SW2 avec e0/1
+
+#### Routage inter-vlan
+
+> Configuration des sous interfaces pour le **Vlan 10** `1/0.10` et **Vlan 20** avec `1/0.20`
+
+```bash
+R1(config)#interface fastEthernet 1/0.10
+R1(config-subif)#encapsulation dot1Q 10
+R1(config-subif)#ip address 10.3.101.254 255.255.255.0
+R1(config-subif)#exit
+
+R1(config)#interface fastEthernet 1/0.20
+R1(config-subif)#encapsulation dot1Q 20
+R1(config-subif)#ip address 10.3.102.254 255.255.255.0
+R1(config-subif)#exit
+R1(config)#exit
+
+R1#show ip int br
+Interface                  IP-Address      OK? Method Status                Protocol
+FastEthernet0/0            10.3.100.1      YES manual up                    up
+FastEthernet1/0            10.3.100.5      YES manual up                    up
+FastEthernet1/0.10         10.3.101.254    YES manual up                    up
+FastEthernet1/0.20         10.3.102.254    YES manual up                    up
+FastEthernet2/0            unassigned      YES unset  administratively down down
+FastEthernet3/0            unassigned      YES unset  administratively down down
+```
+
+Il faut créer un lien entre les deux Switch à l'aide d'un **Trunk**
+
+```bash
+SW1(config)#interface Ethernet 0/0
+SW1(config-if)#switchport trunk encapsulation dot1q
+SW1(config-if)#switchport mode trunk
+SW1(config-if)#switchport trunk allowed vlan add 10
+SW1(config-if)#switchport trunk allowed vlan add 20
+```
+
+### Nat
+
+> NAT 
+>
+> Tout d'abord, on configure notre **Router 2** qui est relié à la **NAT**
+
+```bash
+R2(config)#interface fastEthernet 0/0
+R2(config-if)#ip address dhcp
+R2(config-if)#no shut
+R2(config-if)#exit
+R2#sh ip int br
+Interface                  IP-Address      OK? Method Status                Protocol
+FastEthernet0/0            192.168.122.122 YES DHCP   up                    up
+FastEthernet1/0            10.3.100.5      YES manual up                    up
+FastEthernet2/0            unassigned      YES unset  administratively down down
+FastEthernet3/0            unassigned      YES unset  administratively down down
+
+R2#ping 8.8.8.8
+
+Type escape sequence to abort.
+Sending 5, 100-byte ICMP Echos to 8.8.8.8, timeout is 2 seconds:
+!!!!!
+Success rate is 100 percent (5/5), round-trip min/avg/max = 12/17/24 ms
+```
+
+L'interface a été configurée en **DHCP**, et une ip a été délivrée
+
+> On doit maintenant donner l'accès à internet au **routeur R1**
+
+```bash
+R2(config)#interface FastEthernet0/0
+R2(config-if)#ip nat outside
+R2(config-if)#exit
+
+R2(config)#interface FastEthernet1/0
+R2(config-if)#ip nat inside
+R2(config-if)#exit
+
+R2(config)#ip nat inside source list 1 interface fastEthernet0/0 overload
+R2(config)#access-list 1 permit any
+```
+
+On peut désormais **PING** vers **8.8.8.8** (exemple avec Client1 et Server1)
+
+[screen](https://github.com/BenoitYnov/B2-CCNA2/blob/master/img/pingclientrouternat.png?raw=true) 
+
+```bash
+[centos@client 1]# ping 8.8.8.8
+PING 8.8.8.8 (8.8.8.8) 56(84) bytes of data.
+64 bytes from 8.8.8.8: icmp_seq=1 ttl=121 time=42,2 ms
+64 bytes from 8.8.8.8: icmp_seq=2 ttl=121 time=14,4 ms
+64 bytes from 8.8.8.8: icmp_seq=3 ttl=121 time=10,1 ms
+^C
+--- 8.8.8.8 ping statistics ---
+3 packets transmitted, 3 received, 0% packet loss, time 2027ms
+rtt min/avg/max/mdev = 10.167/22.292/42.287/14.245 ms
+```
+
+[screen](https://github.com/BenoitYnov/B2-CCNA2/blob/master/img/pingserverrouternat.png?raw=true) 
+
+```bash
+[centos@server1 1]# ping 8.8.8.8
+PING 8.8.8.8 (8.8.8.8) 56(84) bytes of data.
+64 bytes from 8.8.8.8: icmp_seq=1 ttl=121 time=11,4 ms
+64 bytes from 8.8.8.8: icmp_seq=2 ttl=121 time=51,4 ms
+64 bytes from 8.8.8.8: icmp_seq=3 ttl=121 time=14,8 ms
+^C
+--- 8.8.8.8 ping statistics ---
+3 packets transmitted, 3 received, 0% packet loss, time 2049ms
+rtt min/avg/max/mdev = 11,402/25,887/51,430/18,115 ms
+```
+
+
+
+🔥 
